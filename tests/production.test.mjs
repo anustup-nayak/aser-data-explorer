@@ -865,7 +865,10 @@ let live = false;
 
 before(async () => {
   try {
-    const r = await fetch(`${ORIGIN}/api/metadata`, { signal: AbortSignal.timeout(4000) });
+    // Free-tier production can cold-start after inactivity. The reachability
+    // probe must outlive that expected delay or it silently skips the live
+    // battery against a healthy deployment.
+    const r = await fetch(`${ORIGIN}/api/metadata`, { signal: AbortSignal.timeout(15000) });
     live = r.ok;
   } catch { live = false; }
   if (!live) console.log(`# no server at ${ORIGIN} — API contract tests skipped`);
@@ -1077,7 +1080,7 @@ const districtQuery = (indicator, parent) =>
 
 before(async () => {
   try {
-    const r = await fetch(`${ORIGIN}/api/metadata`, { signal: AbortSignal.timeout(4000) });
+    const r = await fetch(`${ORIGIN}/api/metadata`, { signal: AbortSignal.timeout(15000) });
     live = r.ok;
     if (live) {
       const meta = await r.json();
