@@ -55,7 +55,7 @@ the production host; the schema and queries use standard PostgreSQL and remain p
 and seeding use the direct connection while the application uses the pooled `DATABASE_URL`.
 
 ```bash
-npm test               # build + 70 tests (data, API, model, composition, parity, honesty)
+npm test               # build + 71 tests (data, API, model, composition, parity, honesty)
 npm run build          # production build
 npm run lint
 ```
