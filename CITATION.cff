@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, cite this repository and separately cite the
+  original ASER report page attached to each value.
+title: ASER Data Explorer
+type: software
+authors:
+  - family-names: Nayak
+    given-names: Anustup
+    email: anustup.nayak@gmail.com
+repository-code: https://github.com/anustup-nayak/aser-data-explorer
+url: https://aser-data-explorer.vercel.app
+version: 1.0.0
+date-released: 2026-07-26
+license: MIT
+abstract: >-
+  An independent, unofficial, source-linked web explorer for published ASER
+  reading and arithmetic estimates across rural India, states, and districts.
+keywords:
+  - ASER
+  - education data
+  - foundational literacy
+  - foundational numeracy
+  - rural India
+  - data visualization

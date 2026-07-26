@@ -1,5 +1,9 @@
 # ASER Data Explorer
 
+[![Release gates](https://github.com/anustup-nayak/aser-data-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/anustup-nayak/aser-data-explorer/actions/workflows/ci.yml)
+[![Live site](https://img.shields.io/badge/live-Vercel-000000?logo=vercel)](https://aser-data-explorer.vercel.app)
+[![MIT licence](https://img.shields.io/github/license/anustup-nayak/aser-data-explorer)](LICENSE)
+
 An independent, source-linked explorer for learning data from **ASER** (the Annual Status of
 Education Report), the citizen-led household survey of children's schooling and foundational
 reading and arithmetic across rural India, published by ASER Centre / Pratham.
@@ -24,6 +28,26 @@ gives back the answer, the evidence, and the citation together.
 The design constraint throughout: **a number quoted from this site must survive peer review.**
 That means construct integrity over convenience, honest gaps over tidy charts, and provenance
 attached to every value including its CSV and image exports.
+
+## Use it four ways
+
+1. **Explore without installing anything:** open the [live data explorer](https://aser-data-explorer.vercel.app),
+   build a question, and share its URL or export a source-linked CSV/PNG.
+2. **Query the public API:** start with the [metadata catalogue](https://aser-data-explorer.vercel.app/api/metadata),
+   then request a published cut:
+
+   ```bash
+   curl -G https://aser-data-explorer.vercel.app/api/explorer \
+     --data-urlencode "year=2024" \
+     --data-urlencode "indicator=% Std III children who can read Std II level text" \
+     --data-urlencode "geographyType=state" \
+     --data-urlencode "subgroup=All"
+   ```
+
+3. **Run or adapt it locally:** clone the repository and follow Quick start. Standard PostgreSQL,
+   provider-neutral queries, and reviewed migrations keep it portable.
+4. **Extend or audit it:** use the dataset registry and invariant-based production battery to add
+   another source, reproduce a number, or review every lineage and comparability rule.
 
 ## What it does
 
@@ -67,6 +91,8 @@ not offered.
 ## Quick start
 
 ```bash
+git clone https://github.com/anustup-nayak/aser-data-explorer.git
+cd aser-data-explorer
 npm install
 npm run db:pg:migrate
 npm run db:pg:seed
@@ -122,6 +148,20 @@ The production build must therefore:
 
 The same build, type, lint, dependency-audit and test gates run on every push and pull request in
 [GitHub Actions](https://github.com/anustup-nayak/aser-data-explorer/actions).
+
+## Search and answer-engine discoverability
+
+The production build exposes a canonical URL, descriptive title/summary, Open Graph and Twitter
+cards, a generated social preview, `robots.txt`, `sitemap.xml`, and Schema.org `WebSite`,
+`WebApplication`, and `Dataset` JSON-LD. Search crawlers can index the explanatory page while
+parameterized API routes are kept out of the search index.
+
+[`llms.txt`](https://aser-data-explorer.vercel.app/llms.txt) gives answer engines a compact,
+source-linked description of coverage, interpretation rules, official reports, APIs, repository,
+and feedback routes. `OAI-SearchBot`, ChatGPT user retrieval, Googlebot, Bingbot, and GPTBot are
+allowed to crawl the public site. These controls make the site technically discoverable; they do
+not guarantee ranking or citation, which also depend on indexing time, external links, relevance,
+and each search provider’s systems.
 
 ## The data
 
@@ -257,6 +297,10 @@ it does not grant rights to ASER/Pratham names, marks, reports, or underlying da
 
 > ASER Centre (2025). *Annual Status of Education Report (Rural) 2024.* New Delhi: ASER Centre /
 > Pratham. https://asercentre.org/
+
+GitHub also exposes the repository’s machine-readable [`CITATION.cff`](CITATION.cff). Cite the
+software when reusing the code or interface, and cite the exact original ASER report page carried
+by each observation when using the data.
 
 ## Feedback, contact, and privacy
 

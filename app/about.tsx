@@ -1,45 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
-
-const REPORTS = [
-  {
-    year: 2012,
-    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER_2012/fullaser2012report.pdf",
-    page: "https://asercentre.org/aser-2012/",
-    lineage: "Explorer cells are read from the retrospective tables in the ASER 2018 report.",
-  },
-  {
-    year: 2014,
-    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202014/fullaser2014mainreport_1.pdf",
-    page: "https://asercentre.org/aser-2014/",
-    lineage: "Explorer cells are read from cited retrospective tables in the ASER 2018 or 2024 report.",
-  },
-  {
-    year: 2016,
-    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202016/aser_2016.pdf",
-    page: "https://asercentre.org/aser-2016/",
-    lineage: "Explorer cells are read from cited retrospective tables in the ASER 2018 or 2024 report.",
-  },
-  {
-    year: 2018,
-    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2018-1.pdf",
-    page: "https://asercentre.org/aser-2018/",
-    lineage: "Explorer cells retain the exact ASER 2018 or 2024 table and page used.",
-  },
-  {
-    year: 2022,
-    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2022-1.pdf",
-    page: "https://asercentre.org/aser-2022/",
-    lineage: "Explorer cells are read from the retrospective tables in the ASER 2024 report.",
-  },
-  {
-    year: 2024,
-    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER_2024_Final-Report_13_2_24-1.pdf",
-    page: "https://asercentre.org/aser-2024/",
-    lineage: "State and national cells use the full report; each district row links its own state estimates PDF.",
-  },
-] as const;
+import { SOURCE_REPORTS } from "./lib/site";
 
 /**
  * About the data: what ASER measures, how each learning outcome is assessed
@@ -193,7 +155,7 @@ export function About() {
         on-screen value therefore keeps the report edition and page actually used.
       </p>
       <ul className="reportList">
-        {REPORTS.map(report => (
+        {SOURCE_REPORTS.map(report => (
           <li key={report.year}>
             <b>ASER {report.year}</b>:{" "}
             <a href={report.pdf} target="_blank" rel="noopener noreferrer">full report PDF ↗</a>

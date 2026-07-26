@@ -1,0 +1,47 @@
+# ASER Data Explorer
+
+> Independent, unofficial, source-linked explorer for published ASER learning data in rural India.
+
+Canonical site: https://aser-data-explorer.vercel.app
+Public repository: https://github.com/anustup-nayak/aser-data-explorer
+Contact: mailto:anustup.nayak@gmail.com
+
+## What the site answers
+
+- Reading and arithmetic learning outcomes for India (rural), 27 states, and 588 districts.
+- Comparable in-person survey rounds: 2012, 2014, 2016, 2018, 2022, and 2024.
+- State/national school-type trends; all-children measures; 2024 skill distributions.
+- 2024 district estimates use ASER's published grade bands, not single grades.
+- Every displayed observation carries an official source URL and PDF page.
+
+## Interpretation rules
+
+- This is not an official ASER Centre or Pratham product.
+- The original ASER reports are authoritative and should be cited.
+- Missing or suppressed values are never converted to zero or interpolated.
+- The 2020–21 phone rounds are excluded from trends because their method is not comparable.
+- Trends compare different cohorts of children, not the progress of the same children.
+- Government/private gaps are descriptive and partly reflect who attends each school type.
+- District estimates have wider uncertainty and are not directly comparable with single-grade state estimates.
+- The survey year can differ from the report edition supplying a retrospective table; use each row's source URL and page.
+
+## Official full reports represented
+
+- ASER 2012: https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER_2012/fullaser2012report.pdf
+- ASER 2014: https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202014/fullaser2014mainreport_1.pdf
+- ASER 2016: https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202016/aser_2016.pdf
+- ASER 2018: https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2018-1.pdf
+- ASER 2022: https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2022-1.pdf
+- ASER 2024: https://asercentre.org/wp-content/uploads/2022/12/ASER_2024_Final-Report_13_2_24-1.pdf
+
+## Public data interfaces
+
+- Metadata catalogue: https://aser-data-explorer.vercel.app/api/metadata
+- Explorer, lineage, trends, profile, and CSV export are read-only parameterized routes.
+- API field definitions and local setup: https://github.com/anustup-nayak/aser-data-explorer#the-data
+- Reuse exact source URLs, pages, construct labels, denominators, and comparability fields.
+
+## Feedback
+
+- Public issue form: https://github.com/anustup-nayak/aser-data-explorer/issues/new?template=feedback.yml
+- Do not put personal, confidential, sensitive, or security information in public issues.

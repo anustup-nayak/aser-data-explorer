@@ -338,12 +338,13 @@ test("About explains how each learning outcome is measured, with the ASER tasks"
 
 test("the website and README provide the complete tutorial and verified year-wise report directory", async () => {
   const about = await read("app/about.tsx");
+  const sources = await read("app/lib/site.ts");
   const readme = await read("README.md");
   for (const year of [2012, 2014, 2016, 2018, 2022, 2024]) {
-    assert.match(about, new RegExp(`year: ${year}`), `website is missing ASER ${year} report`);
+    assert.match(sources, new RegExp(`year: ${year}`), `website is missing ASER ${year} report`);
     assert.match(readme, new RegExp(`ASER ${year}`), `README is missing ASER ${year} report`);
   }
-  for (const content of [about, readme]) {
+  for (const content of [about + sources, readme]) {
     for (const concept of [
       /dropdown/i, /ranking/i, /headline/i, /trend/i, /comparison/i,
       /skill ladder/i, /district/i, /View as table/i, /CSV/i, /PNG/i,
@@ -359,7 +360,7 @@ test("the website and README provide the complete tutorial and verified year-wis
     "ASER-report_2022-1.pdf",
     "ASER_2024_Final-Report_13_2_24-1.pdf",
   ]) {
-    assert.match(about, new RegExp(pdf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(sources, new RegExp(pdf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
     assert.match(readme, new RegExp(pdf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 });
@@ -451,9 +452,25 @@ test("a dead end always offers a way forward", async () => {
 test("the layout carries the site identity", async () => {
   const layout = await read("app/layout.tsx");
   const about = await read("app/about.tsx");
+  const robots = await read("app/robots.ts");
+  const sitemap = await read("app/sitemap.ts");
+  const social = await read("app/opengraph-image.tsx");
+  const llms = await read("public/llms.txt");
+  const citation = await read("CITATION.cff");
   assert.match(layout, /ASER Data Explorer/);
   assert.match(layout, /@vercel\/analytics\/next/);
   assert.match(layout, /<Analytics/);
+  assert.match(layout, /application\/ld\+json/);
+  assert.match(layout, /"@type": "Dataset"/);
+  assert.match(layout, /openGraph/);
+  assert.match(robots, /OAI-SearchBot/);
+  assert.match(robots, /sitemap\.xml/);
+  assert.match(sitemap, /SITE_URL/);
+  assert.match(social, /ImageResponse/);
+  assert.match(llms, /Independent, unofficial/);
+  assert.match(llms, /Official full reports represented/);
+  assert.match(citation, /version: 1\.0\.0/);
+  assert.match(citation, /original ASER report page/);
   assert.match(about, /anustup\.nayak@gmail\.com/);
   assert.match(about, /submitFeedback/);
   assert.match(about, /Vercel Web Analytics/);
