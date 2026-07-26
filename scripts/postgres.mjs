@@ -50,8 +50,8 @@ const close = async () => {
 };
 
 const EXPECTED = Object.freeze({
-  rows: 12552,
-  state: 8901,
+  rows: 12558,
+  state: 8907,
   national: 132,
   district: 3519,
 });

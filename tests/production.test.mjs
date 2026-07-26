@@ -803,13 +803,13 @@ test("full migration chain applies cleanly to a blank database", async () => {
     const [count, ids, sources] = q(database,
       "SELECT COUNT(*) || '|' || COUNT(DISTINCT id) || '|' || COUNT(DISTINCT source_url) FROM public_observations;"
     ).split("|").map(Number);
-    assert.equal(count, 12552);
+    assert.equal(count, 12558);
     assert.equal(ids, count, "every observation id must be unique");
     assert.ok(sources >= 29, "27 district PDFs + two national reports");
     const byType = Object.fromEntries(q(database,
       "SELECT geography_type, COUNT(*) FROM public_observations GROUP BY geography_type;"
     ).split("\n").map(l => l.split("|")));
-    assert.equal(Number(byType.state), 8901);
+    assert.equal(Number(byType.state), 8907);
     assert.equal(Number(byType.national), 132);
     assert.equal(Number(byType.district), 3519);
   } finally { await rm(database, { force: true }); }
@@ -862,6 +862,38 @@ test("school-type trend series span 2012-2024 with boundary-consistent states", 
     assert.equal(q(database,
       `SELECT COUNT(*) FROM public_observations WHERE ${schoolTypeFilter} AND subgroup_label='All';`
     ), "0");
+
+    // No state may be missing a round its neighbours publish. Uttar Pradesh's
+    // Std III reading rounds for 2022 and 2024 were absent for exactly this
+    // reason: on that one page the extractor could not associate a year label
+    // with its values, and nothing asserted that the series were the same
+    // length. This checks every state against the modal series length.
+    const lengths = q(database,
+      `SELECT geography || '|' || COUNT(DISTINCT observation_year)
+         FROM public_observations
+        WHERE indicator = 'Std III: % children reading at Std II level'
+          AND subgroup_label = 'Govt' AND geography_type = 'state'
+        GROUP BY geography;`
+    ).split("\n").map(line => line.split("|")).map(([geo, n]) => [geo, Number(n)]);
+    assert.equal(lengths.length, 27, "every state must publish a Std III reading series");
+    const thin = lengths.filter(([, n]) => n < 6).map(([geo, n]) => `${geo}:${n}`);
+    // Sikkim genuinely publishes fewer rounds (ASER suppresses its cells); any
+    // other short series means a round was dropped in extraction.
+    assert.deepEqual(thin, ["Sikkim:3"],
+      `unexpected short school-type series: ${thin.join(", ")}`);
+
+    // The recovered Uttar Pradesh values, pinned so a regression is visible.
+    for (const [year, subgroup, value] of [
+      [2022, "Govt", 16.4], [2022, "Pvt", 38.5], [2022, "Govt & Pvt (weighted)", 24],
+      [2024, "Govt", 27.9], [2024, "Pvt", 43], [2024, "Govt & Pvt (weighted)", 34.4],
+    ]) {
+      assert.equal(Number(q(database,
+        `SELECT numeric_value FROM public_observations
+          WHERE geography='Uttar Pradesh' AND observation_year=${year}
+            AND indicator='Std III: % children reading at Std II level'
+            AND subgroup_label='${subgroup}';`
+      )), value, `Uttar Pradesh ${year} ${subgroup}`);
+    }
   } finally { await rm(database, { force: true }); }
 });
 
@@ -905,7 +937,7 @@ test("metadata exposes the catalogue and no private columns", async (t) => {
   const m = await json("/api/metadata");
   // Coverage counts the public surface only — district rows exist in the
   // database but must not inflate what the website claims to show.
-  assert.equal(m.coverage.observations, 9033);
+  assert.equal(m.coverage.observations, 9039);
   assert.equal(m.coverage.geographies, 28, "27 states + India (rural)");
   assert.equal(m.coverage.years, 6);
   const text = JSON.stringify(m);
