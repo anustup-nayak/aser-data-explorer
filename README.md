@@ -7,7 +7,9 @@ reading and arithmetic across rural India, published by ASER Centre / Pratham.
 Every number on screen traces to the exact page of the report it came from. Nothing is
 interpolated, averaged, or filled in. This is not an official Pratham or ASER product.
 
-> **Status:** production release candidate — national, state and district levels, six comparable
+**Live site:** [aser-data-explorer.vercel.app](https://aser-data-explorer.vercel.app)
+
+> **Status:** public production release — national, state and district levels, six comparable
 > survey rounds (2012–2024) for state/national measures and 2024 district estimates.
 
 ---
@@ -28,6 +30,9 @@ attached to every value including its CSV and image exports.
 - **One question, three answers.** You build a sentence — round, grade, school type, geography,
   skill — and get a ranked comparison, a headline figure with its rank, and the full skill
   distribution behind it.
+- **The longest series first.** Government schools are the default population so all six
+  comparable survey rounds are immediately available; all-school and private-school views remain
+  one selection away.
 - **One geography hierarchy.** Rural India → states → a state's districts, in a single control.
   The ranking always compares siblings and anchors to the parent: states against India, districts
   against their own state.
@@ -39,6 +44,25 @@ attached to every value including its CSV and image exports.
 - **Honest by construction.** Controls only ever offer published combinations; suppressed cells
   stay absent rather than becoming zero; a trend needs two comparable rounds or it explains why
   it is withheld; a shared link that cannot be honoured says what it changed.
+
+## Two-minute user tutorial
+
+Start with the highlighted question at the top of the site and work from left to right. Government
+schools are selected initially because that construct has the longest comparable series. Every
+dropdown change updates the full page and the shareable URL; choices that were not published are
+not offered.
+
+| View or control | How to generate it | How to read it |
+|---|---|---|
+| Survey round, grade/band, school type, geography, skill | Choose each phrase in the question sentence. Select a state to reveal its 2024 districts. | These choices define the population and construct; changing one can legitimately change the available choices. |
+| Reading / Arithmetic and threshold | Use the subject buttons, then choose “at least this level” or “exactly this level”. | “At least” is cumulative from the chosen rung upward; “exactly” is one exclusive rung. |
+| State/district ranking | Generated automatically for the current question; click a bar row to focus a place. | Bars are ordered highest to lowest among comparable siblings. Rank is descriptive, not causal. |
+| Headline strip | Focus a place, or leave geography at rural India. | The requested value and rank sit beside the India/state anchor and highest/lowest peers. |
+| Trend line | Use a construct with at least two comparable rounds; toggle the year buttons. | Every dot prints its value. The line compares different cohorts, not the same children over time; gaps remain gaps. |
+| Comparison bars | Use the comparison dropdown; add/remove places when that option appears. | Only the named dimension varies. Confirm the “Holding constant” line before interpreting a gap. |
+| Skill ladder | Choose **2024 → all schools → a state**. | Exclusive rungs partition 100% of children; highlighted rungs are included in the headline measure. |
+| District cards | Choose a state, then a district or district row. | These are 2024 grade-band estimates with wider uncertainty, not single-grade state estimates. |
+| Table, source and downloads | Open “View as table”, follow the report-page link, or select CSV/PNG. | The table and CSV carry exact values and lineage; PNG is presentation-ready. Copy the browser URL to share the view. |
 
 ## Quick start
 
@@ -55,7 +79,7 @@ the production host; the schema and queries use standard PostgreSQL and remain p
 and seeding use the direct connection while the application uses the pooled `DATABASE_URL`.
 
 ```bash
-npm test               # build + 71 tests (data, API, model, composition, parity, honesty)
+npm test               # build + 73 tests (data, API, model, composition, parity, honesty)
 npm run build          # production build
 npm run lint
 ```
@@ -77,7 +101,7 @@ Vercel Hobby, native Next.js and Neon Free PostgreSQL.
 | Cost authority | No paid plan, add-on, marketplace purchase or usage-based billing may be enabled without explicit owner approval |
 | Source documents | Link to official ASER sources; do not redistribute source PDFs without written permission |
 | Software licence | MIT for original project code; this does not license ASER data, reports, names or marks |
-| Analytics | Disabled until a separate privacy decision is approved |
+| Analytics | Cookieless Vercel Web Analytics, with no custom events |
 
 Free infrastructure has material operational limits. It does not provide a production SLA or
 guarantee uninterrupted service under heavy traffic. Neon Free currently has finite storage,
@@ -96,8 +120,8 @@ The production build must therefore:
 - keep the portable PostgreSQL migration and verified logical source data as the provider-exit path;
 - treat a free-tier limit as an availability limitation, never as permission to incur charges.
 
-For the complete production gates, open issues and rollback policy, see
-[the current production UAT and roadmap](UAT/2026-07-26_13-25-47_IST_ASER_UAT_FINDINGS.md).
+The same build, type, lint, dependency-audit and test gates run on every push and pull request in
+[GitHub Actions](https://github.com/anustup-nayak/aser-data-explorer/actions).
 
 ## The data
 
@@ -107,7 +131,26 @@ For the complete production gates, open issues and rollback policy, see
 | Districts | 588 across 27 states (2024) |
 | Survey rounds | 2012, 2014, 2016, 2018, 2022, 2024 |
 | Geographies | 27 states + India (rural) |
-| Sources | ASER 2024 full report; ASER 2018 full report; 27 state district-estimate PDFs |
+| Sources used for cells | ASER 2024 full report; ASER 2018 full report; 27 state district-estimate PDFs |
+
+### Official full reports by survey year
+
+The survey year and the source edition for a database cell are not always the same: later ASER
+reports republish earlier rounds in retrospective trend tables. The site keeps the exact source
+edition and page on every value. These links provide the official full report and official archive
+page for every survey round represented:
+
+| Survey year | Full report PDF | Official year page | Source lineage in this explorer |
+|---|---|---|---|
+| 2012 | [ASER 2012 full report](https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER_2012/fullaser2012report.pdf) | [ASER 2012 archive](https://asercentre.org/aser-2012/) | Cells are read from ASER 2018 retrospective tables. |
+| 2014 | [ASER 2014 full report](https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202014/fullaser2014mainreport_1.pdf) | [ASER 2014 archive](https://asercentre.org/aser-2014/) | Cells are read from cited ASER 2018 or 2024 retrospective tables. |
+| 2016 | [ASER 2016 full report](https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202016/aser_2016.pdf) | [ASER 2016 archive](https://asercentre.org/aser-2016/) | Cells are read from cited ASER 2018 or 2024 retrospective tables. |
+| 2018 | [ASER 2018 full report](https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2018-1.pdf) | [ASER 2018 archive](https://asercentre.org/aser-2018/) | Cells retain the exact ASER 2018 or 2024 table and page used. |
+| 2022 | [ASER 2022 full report](https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2022-1.pdf) | [ASER 2022 archive](https://asercentre.org/aser-2022/) | Cells are read from ASER 2024 retrospective tables. |
+| 2024 | [ASER 2024 full report](https://asercentre.org/wp-content/uploads/2022/12/ASER_2024_Final-Report_13_2_24-1.pdf) | [ASER 2024 archive](https://asercentre.org/aser-2024/) | State/national cells use the full report; every district row links its state estimates PDF. |
+
+The reports remain ASER Centre/Pratham publications. They are linked, not redistributed in this
+repository.
 
 ### The three constructs — never mixed
 
@@ -142,9 +185,6 @@ Four independent checks had to pass before the data was accepted:
 - **District anchors** — each of the 27 district tables carries a state total row, and all 27
   matched the independently-sourced state value.
 
-Full findings, including the defects the UAT caught and how each was fixed, are in
-[docs/UAT_REPORT.md](docs/UAT_REPORT.md).
-
 ## Architecture
 
 ```
@@ -165,8 +205,8 @@ db/observations.ts      provider-neutral port + PostgreSQL implementation
 db/postgres.sql         production schema with integrity constraints and indexes
 drizzle/                reviewed source-data migration chain (0000 → 0003)
 scripts/postgres.mjs    migrate · seed · verify with atomic staging promotion
-tests/                  data integrity · API contract · question model · composition
-                        district parity · cut identity · analytical honesty
+tests/production.test.mjs
+                        complete data · API · model · parity · accessibility guard battery
 ```
 
 Two rules keep this navigable. **Data flows downward:** cards receive what they render and never
@@ -217,6 +257,18 @@ it does not grant rights to ASER/Pratham names, marks, reports, or underlying da
 
 > ASER Centre (2025). *Annual Status of Education Report (Rural) 2024.* New Delhi: ASER Centre /
 > Pratham. https://asercentre.org/
+
+## Feedback, contact, and privacy
+
+Use the feedback form under **About the data**, or open the repository's
+[feedback form](https://github.com/anustup-nayak/aser-data-explorer/issues/new?template=feedback.yml).
+People without a GitHub account can email
+[anustup.nayak@gmail.com](mailto:anustup.nayak@gmail.com). GitHub issues are public, so never
+include personal, confidential, or sensitive information.
+
+The site uses cookieless Vercel Web Analytics for aggregate page-view, referrer, country,
+operating-system, device, and browser statistics. It does not send custom events. See
+[Vercel's privacy documentation](https://vercel.com/docs/analytics/privacy-policy).
 
 ## Contributing
 

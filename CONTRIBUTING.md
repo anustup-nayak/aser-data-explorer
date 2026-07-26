@@ -17,6 +17,13 @@ npm run lint
 npm test
 ```
 
+All automated checks live in `tests/production.test.mjs`. To include the live API and complete
+district parity battery, run:
+
+```bash
+ASER_TEST_ORIGIN=https://aser-data-explorer.vercel.app npm test
+```
+
 Data changes must also pass `npm run db:pg:verify` against the target database. Never add a value
 without its official source URL, PDF page, unit, construct, and comparability designation. Do not
 bundle ASER PDFs or marks unless you have explicit redistribution permission.

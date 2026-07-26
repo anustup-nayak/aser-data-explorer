@@ -3,10 +3,8 @@ import { getObservationRepository } from "../../db/observations";
 /**
  * Shared request parsing and guards for the public data API.
  *
- * Public surface rule: the website serves national and state geographies only.
- * District rows exist in the database (2024 district estimates, grade-band
- * constructs) but are deliberately not reachable through these routes until the
- * district drill-down ships — see docs/UAT_REPORT.md.
+ * Public surface rule: national/state results are comparable only with their
+ * own geography level; district requests require an explicit parent state.
  */
 
 export const PUBLIC_GEOGRAPHY_TYPES = ["state", "national", "district"] as const;

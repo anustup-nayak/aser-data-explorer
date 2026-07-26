@@ -221,8 +221,8 @@ export default function Home() {
                 : <Sel label="Grade" value={q.grade} options={gradesFor(q).map(String)}
                     labels={gradesFor(q).map(g => `Std ${ROMAN[g]}`)}
                     onChange={v => set({ grade: Number(v) })} />} children in{" "}
-              <Sel label="School type" value={q.school} options={["All", "Govt", "Pvt"]}
-                labels={["all schools", "government schools", "private schools"]}
+              <Sel label="School type" value={q.school} options={["Govt", "All", "Pvt"]}
+                labels={["government schools", "all schools", "private schools"]}
                 onChange={v => set({ school: v as Question["school"] })} />{" "}
               <GeoSel q={q} states={states} districts={districtsOfFocus}
                 onChange={(geo, parent) => set({ geo, parent })} />{" "}

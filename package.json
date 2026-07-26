@@ -9,9 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "npm run build && node --test tests/*.test.mjs",
+    "test": "npm run build && node --test tests/production.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate",
     "db:pg:check": "node --env-file-if-exists=.env.local scripts/postgres.mjs check",
     "db:pg:migrate": "node --env-file-if-exists=.env.local scripts/postgres.mjs migrate",
     "db:pg:seed": "node --env-file-if-exists=.env.local scripts/postgres.mjs seed",
@@ -19,7 +18,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "1.1.0",
-    "drizzle-orm": "0.45.2",
+    "@vercel/analytics": "2.0.1",
     "next": "16.2.12",
     "postgres": "3.4.9",
     "react": "19.2.6",
@@ -29,13 +28,11 @@
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.12",
     "typescript": "5.9.3"
   },
   "overrides": {
-    "esbuild": "0.25.12",
     "postcss": "8.5.18",
     "sharp": "0.35.0"
   },

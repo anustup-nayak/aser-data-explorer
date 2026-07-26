@@ -1,8 +1,68 @@
+"use client";
+
+import type { FormEvent } from "react";
+
+const REPORTS = [
+  {
+    year: 2012,
+    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER_2012/fullaser2012report.pdf",
+    page: "https://asercentre.org/aser-2012/",
+    lineage: "Explorer cells are read from the retrospective tables in the ASER 2018 report.",
+  },
+  {
+    year: 2014,
+    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202014/fullaser2014mainreport_1.pdf",
+    page: "https://asercentre.org/aser-2014/",
+    lineage: "Explorer cells are read from cited retrospective tables in the ASER 2018 or 2024 report.",
+  },
+  {
+    year: 2016,
+    pdf: "https://img.asercentre.org/docs/Publications/ASER%20Reports/ASER%202016/aser_2016.pdf",
+    page: "https://asercentre.org/aser-2016/",
+    lineage: "Explorer cells are read from cited retrospective tables in the ASER 2018 or 2024 report.",
+  },
+  {
+    year: 2018,
+    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2018-1.pdf",
+    page: "https://asercentre.org/aser-2018/",
+    lineage: "Explorer cells retain the exact ASER 2018 or 2024 table and page used.",
+  },
+  {
+    year: 2022,
+    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER-report_2022-1.pdf",
+    page: "https://asercentre.org/aser-2022/",
+    lineage: "Explorer cells are read from the retrospective tables in the ASER 2024 report.",
+  },
+  {
+    year: 2024,
+    pdf: "https://asercentre.org/wp-content/uploads/2022/12/ASER_2024_Final-Report_13_2_24-1.pdf",
+    page: "https://asercentre.org/aser-2024/",
+    lineage: "State and national cells use the full report; each district row links its own state estimates PDF.",
+  },
+] as const;
+
 /**
  * About the data: what ASER measures, how each learning outcome is assessed
  * (with the actual ASER task items), which constructs this explorer serves,
  * provenance, precision caveats, and how to navigate & cite.
  */
+function submitFeedback(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const category = String(form.get("category") ?? "Feedback");
+  const summary = String(form.get("summary") ?? "").trim();
+  const details = String(form.get("details") ?? "").trim();
+  const issue = new URL("https://github.com/anustup-nayak/aser-data-explorer/issues/new");
+  issue.searchParams.set("title", `[${category}] ${summary}`);
+  issue.searchParams.set("body", [
+    `### Category\n${category}`,
+    `### Feedback\n${details}`,
+    `### Page\n${window.location.href}`,
+    "_Please do not include personal, confidential, or sensitive information in this public issue._",
+  ].join("\n\n"));
+  window.open(issue, "_blank", "noopener,noreferrer");
+}
+
 export function About() {
   return (
     <article className="about">
@@ -14,6 +74,35 @@ export function About() {
         of the ASER report it was taken from. This is not an official Pratham or ASER website,
         and the original reports remain the authoritative source.
       </p>
+
+      <h2>Two-minute user guide</h2>
+      <ol className="guide">
+        <li><b>Build the question.</b> Use the highlighted sentence from left to right: survey
+        round, grade (or district grade band), school type, geography, and skill. Government
+        schools are the default because they provide the longest series. Changing any dropdown
+        redraws every answer; unavailable combinations are not offered.</li>
+        <li><b>Choose the measure.</b> Switch between Reading and Arithmetic. “At least this
+        level” counts the chosen rung and every higher rung; “exactly this level” counts only
+        that rung.</li>
+        <li><b>State or district comparison.</b> The ranked horizontal bars run from highest to
+        lowest for comparable places. Click a place to open its profile. Rank is descriptive,
+        not proof that a school system caused the difference.</li>
+        <li><b>Headline strip.</b> This restates the selected place’s value and rank, with the
+        published India/state anchor and highest and lowest peers for context.</li>
+        <li><b>Trend line.</b> “Has this changed over time?” appears automatically when at least
+        two comparable rounds exist. Toggle year buttons to set the range; every dot prints its
+        value. Read it as change between different cohorts, not progress by the same children.</li>
+        <li><b>Comparison bars.</b> In “How does this compare?”, choose the comparison dropdown
+        (school types, selected places, subject, or all children). The “Holding constant” line
+        names what did not change; add or remove places where offered.</li>
+        <li><b>Skill ladder and districts.</b> The ladder partitions all children across
+        mutually exclusive skill rungs; highlighted rungs make up the headline measure. It is
+        available for all-school 2024 state views. District cards use ASER’s separate 2024 grade
+        bands and should not be compared directly with a single-grade state result.</li>
+        <li><b>Check and reuse.</b> Open “View as table” for exact values, follow the source/page
+        link to the report, or download CSV/PNG. The URL updates with every choice, so copying it
+        shares the same view.</li>
+      </ol>
 
       <h2>How ASER measures learning — the actual tasks</h2>
       <p>
@@ -48,10 +137,10 @@ export function About() {
 
       <h2>The three constructs in this dataset — never mixed</h2>
       <ul>
-        <li><b>All-children measures</b> (the default): every surveyed child in the grade,
+        <li><b>All-children measures</b>: every surveyed child in the grade,
         whatever school they attend. Published 2018, 2022, 2024 (state and national), plus full
         rung-by-rung ladders for 2024.</li>
-        <li><b>School-type series</b>: government-school and private-school children separately,
+        <li><b>School-type series</b> (the default view): government-school and private-school children separately,
         with ASER's <i>"Govt &amp; Pvt (weighted)"</i> average of the two. This average excludes
         children in other school types, so it differs slightly from the all-children figure.
         Published for Std III, V and VIII back to <b>2012</b> — the longest comparable series here.</li>
@@ -95,6 +184,64 @@ export function About() {
         Education Report (Rural) 2024. New Delhi: ASER Centre / Pratham.</i> — and equivalently
         for ASER 2018. Report PDFs: asercentre.org. When quoting a number found here, the
         matching report page is linked beside it.
+      </p>
+
+      <h2>Official reports by survey year</h2>
+      <p>
+        These are the exact official full-report links for every round shown here. The explorer
+        may use a later report’s retrospective trend table for an earlier survey year; each
+        on-screen value therefore keeps the report edition and page actually used.
+      </p>
+      <ul className="reportList">
+        {REPORTS.map(report => (
+          <li key={report.year}>
+            <b>ASER {report.year}</b>:{" "}
+            <a href={report.pdf} target="_blank" rel="noopener noreferrer">full report PDF ↗</a>
+            {" · "}
+            <a href={report.page} target="_blank" rel="noopener noreferrer">official year page ↗</a>.
+            {" "}{report.lineage}
+          </li>
+        ))}
+      </ul>
+
+      <h2>Feedback and corrections</h2>
+      <p>
+        Found a data issue, accessibility problem, or useful improvement? This short form opens a
+        public GitHub issue for you to review and submit. Please do not include personal,
+        confidential, or sensitive information. If you do not use GitHub, email{" "}
+        <a href="mailto:anustup.nayak@gmail.com">anustup.nayak@gmail.com</a>.
+      </p>
+      <form className="feedback" onSubmit={submitFeedback}>
+        <label>
+          Type
+          <select name="category" defaultValue="Data issue">
+            <option>Data issue</option>
+            <option>Bug</option>
+            <option>Accessibility</option>
+            <option>Suggestion</option>
+            <option>Documentation</option>
+          </select>
+        </label>
+        <label>
+          Short summary
+          <input name="summary" required maxLength={120} />
+        </label>
+        <label>
+          What happened, or what should improve?
+          <textarea name="details" required rows={5} maxLength={4000} />
+        </label>
+        <button type="submit">Continue to GitHub</button>
+      </form>
+
+      <h2>Privacy</h2>
+      <p>
+        The site uses Vercel Web Analytics for aggregate page-view statistics such as pages,
+        referrers, country, operating system, device type, and browser. Vercel states that this
+        service does not use cookies and does not associate events with a persistent personal
+        identifier. No custom events are collected. Read{" "}
+        <a href="https://vercel.com/docs/analytics/privacy-policy"
+          target="_blank" rel="noopener noreferrer">Vercel&apos;s analytics privacy documentation</a>.
+        Feedback is sent only when you continue to GitHub and submit the public issue, or email it.
       </p>
     </article>
   );

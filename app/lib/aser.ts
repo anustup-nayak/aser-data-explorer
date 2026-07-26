@@ -161,7 +161,7 @@ export const cutKey = (q: Question): string =>
   ].join("|");
 
 export const DEFAULT_QUESTION: Question = {
-  year: 2024, subject: "R", grade: 3, school: "All", geo: "ALL", parent: "", level: 4, mode: "cum",
+  year: 2024, subject: "R", grade: 3, school: "Govt", geo: "ALL", parent: "", level: 4, mode: "cum",
 };
 
 export function phrase(q: Question): string {

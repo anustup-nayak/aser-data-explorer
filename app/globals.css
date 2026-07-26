@@ -1,7 +1,6 @@
 /* ASER Data Explorer design system.
    Slate ink on warm paper; primer-blue sequential ramp (reading), teal-green
-   ramp (arithmetic), marigold reserved for selection and focus. Ramp steps are
-   validated for adjacent-step distinctness — see docs/UI_REDESIGN.md. */
+   ramp (arithmetic), marigold reserved for selection and focus. */
 
 :root {
   --paper: #F7F6F2; --card: #FFFFFF; --ink: #1C2733; --ink-2: #454F5E; --ink-3: #656E7C;
@@ -185,3 +184,8 @@ details.tbl td.num { text-align: right; }
 .about .toolList li { padding-left: 34px; position: relative; counter-increment: rung; }
 .about .toolList li::before { content: counter(rung); position: absolute; left: 0; top: 2px; width: 22px; height: 22px; border-radius: 6px; background: var(--accent-soft); color: var(--focus); font-weight: 700; font-size: 12.5px; display: flex; align-items: center; justify-content: center; }
 .about .cite { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; }
+.feedback { display: grid; gap: 12px; margin: 14px 0; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.feedback label { display: grid; gap: 5px; font-weight: 600; }
+.feedback input, .feedback textarea, .feedback select { width: 100%; min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--ink); font: inherit; }
+.feedback textarea { resize: vertical; }
+.feedback button { justify-self: start; min-height: 42px; padding: 8px 14px; border-radius: 6px; background: var(--accent); color: #fff; font-weight: 700; }

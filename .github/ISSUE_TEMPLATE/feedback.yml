@@ -1,0 +1,43 @@
+name: Feedback or correction
+description: Report a data issue, bug, accessibility problem, or suggestion.
+title: "[Feedback] "
+labels:
+  - feedback
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Data issue
+        - Bug
+        - Accessibility
+        - Feature suggestion
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page or shared URL
+      description: Paste the explorer URL that reproduces the issue, if applicable.
+  - type: textarea
+    id: details
+    attributes:
+      label: What happened, or what should improve?
+      description: Include the expected and observed result and concise reproduction steps.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Source or evidence
+      description: For data corrections, link the authoritative ASER report and page.
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Public issue confirmation
+      options:
+        - label: I have not included personal, confidential, or sensitive information.
+          required: true
