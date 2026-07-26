@@ -1,0 +1,10 @@
+UAT
+docs
+drizzle
+scripts
+tests
+.github
+.wrangler
+work
+outputs
+*.tsbuildinfo
